@@ -1,0 +1,21 @@
+package org.RRA.tax_appeal_system.Repositories;
+
+import org.RRA.tax_appeal_system.Models.CommitteeVote;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface CommitteeVoteRepository extends JpaRepository<CommitteeVote, String> {
+    @Query("SELECT cv FROM CommitteeVote cv WHERE cv.appeal.appealId = :appealId")
+    List<CommitteeVote> findByAppealId(@Param("appealId") String appealId);
+
+    @Query("SELECT cv FROM CommitteeVote cv WHERE cv.appeal.appealId = :appealId " +
+            "AND cv.committeeMemberId = :committeeMemberId")
+    Optional<CommitteeVote> findByAppealIdAndCommitteeMemberId(
+            @Param("appealId") String appealId,
+            @Param("committeeMemberId") String committeeMemberId
+    );
+}
