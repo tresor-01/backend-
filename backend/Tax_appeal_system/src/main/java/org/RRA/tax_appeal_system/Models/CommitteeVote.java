@@ -5,6 +5,7 @@ import lombok.Data;
 import org.RRA.tax_appeal_system.Enums.VoteDecision;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name ="committee_votes")
@@ -12,14 +13,14 @@ import java.time.LocalDateTime;
 public class CommitteeVote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "appeal_id", nullable = false)
     private Appeals appeal;
 
     @Column(nullable = false)
-    private String committeeMemberId;
+    private UUID committeeMemberId;
 
     @Column(nullable = false)
     private String committeeMemberName;

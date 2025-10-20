@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ import java.util.Map;
 public class VotingController {
     private final VotingService votingService;
     @PostMapping("/{appealId}/vote")
-    public ResponseEntity<Map<String, Object>> submitVote(@PathVariable String appealId, @Valid @RequestBody VoteRequest voteRequest) {
+    public ResponseEntity<Map<String, Object>> submitVote(@PathVariable UUID appealId, @Valid @RequestBody VoteRequest voteRequest) {
         try {
             CommitteeVote vote = votingService.submitVote(appealId, voteRequest);
 

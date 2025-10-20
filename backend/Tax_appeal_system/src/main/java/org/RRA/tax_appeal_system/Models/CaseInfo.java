@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -15,7 +16,7 @@ import java.util.List;
 public class CaseInfo {
     @Id
     @Column(unique = true,nullable = false,name = "case_id")
-    private String caseId;
+    private UUID caseId;
 
     @Column(nullable = false,name = "auditor_names")
     private String auditorsNames;

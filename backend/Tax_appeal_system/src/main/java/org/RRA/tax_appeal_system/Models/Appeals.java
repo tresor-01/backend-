@@ -2,6 +2,7 @@ package org.RRA.tax_appeal_system.Models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.RRA.tax_appeal_system.Enums.AppealStatus;
 
 import java.util.UUID;
 
@@ -35,5 +36,7 @@ public class Appeals {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tax_audited_id",nullable = false)
     private TaxAudited taxAuditedId;
-
+    @ManyToOne
+    @JoinColumn(name = "case_id", referencedColumnName = "case_id")
+    private CaseInfo caseInfo;
 }
