@@ -3,6 +3,8 @@ package org.RRA.tax_appeal_system.Models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @Builder
 @Getter
@@ -13,7 +15,7 @@ public class Appeals {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "appeal_id")
-    private String appealId;
+    private UUID appealId;
 
     @Column(nullable = false,name = "appeal_points")
     private String appealPoint;

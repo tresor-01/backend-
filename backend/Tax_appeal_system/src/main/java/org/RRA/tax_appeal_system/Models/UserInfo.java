@@ -6,7 +6,7 @@ import lombok.*;
 import org.RRA.tax_appeal_system.Enums.CommitteeGroup;
 import org.RRA.tax_appeal_system.Enums.Privilege;
 
-import java.utils.UUID;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor

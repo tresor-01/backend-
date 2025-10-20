@@ -20,29 +20,29 @@ import java.security.Principal;
 public class ExplanatoryController {
     private final ExplanatoryNoteService explanatoryNoteService;
 
-//    @Operation(summary = " Generating a new Explanatory Note")
-//    @PostMapping("/")
-//    public ResponseEntity<GenericResponse<String>> createExplanatoryNote(@RequestBody ExplanatoryNoteDTO explanatoryNote, Principal principal) {
-//        explanatoryNoteService.generateExplanatoryNote(explanatoryNote,principal.getName());
-//        GenericResponse<String> response = new GenericResponse<>(
-//                HttpStatus.CREATED.value(),
-//                "succesfully Registered new explanatory Note",
-//                null
-//        );
-//        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-//    }
-//
-//    @Operation(summary = " Get Explanatory note by CaseId")
-//    @GetMapping("/{caseId}")
-//    public ResponseEntity<GenericResponse<ExplanatoryNoteDTO>> getExplanatoryNoteByCaseId(
-//            @PathVariable String caseId) {
-//
-//        ExplanatoryNoteDTO explanatoryNote = explanatoryNoteService.getExplanatoryNoteByCaseId(caseId);
-//        return ResponseEntity.ok(new GenericResponse<>(
-//                200,
-//                "Explanatory note retrieved successfully",
-//                explanatoryNote
-//        ));
-//    }
+    @Operation(summary = " Generating a new Explanatory Note")
+    @PostMapping("/")
+    public ResponseEntity<GenericResponse<String>> createExplanatoryNote(@RequestBody ExplanatoryNoteDTO explanatoryNote, Principal principal) {
+        explanatoryNoteService.generateExplanatoryNote(explanatoryNote,principal.getName());
+        GenericResponse<String> response = new GenericResponse<>(
+                HttpStatus.CREATED.value(),
+                "succesfully Registered new explanatory Note",
+                null
+        );
+         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @Operation(summary = " Get Explanatory note by CaseId")
+    @GetMapping("/{caseId}")
+    public ResponseEntity<GenericResponse<ExplanatoryNoteDTO>> getExplanatoryNoteByCaseId(
+            @PathVariable String caseId) {
+
+            ExplanatoryNoteDTO explanatoryNote = explanatoryNoteService.getExplanatoryNoteByCaseId(caseId);
+            return ResponseEntity.ok(new GenericResponse<>(
+                    200,
+                    "Explanatory note retrieved successfully",
+                    explanatoryNote
+            ));
+    }
 
 }
