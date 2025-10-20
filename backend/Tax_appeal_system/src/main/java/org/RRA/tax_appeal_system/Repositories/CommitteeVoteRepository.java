@@ -7,15 +7,14 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface CommitteeVoteRepository extends JpaRepository<CommitteeVote, String> {
+public interface CommitteeVoteRepository extends JpaRepository<CommitteeVote, UUID> {
     @Query("SELECT cv FROM CommitteeVote cv WHERE cv.appeal.appealId = :appealId")
-    List<CommitteeVote> findByAppealId(@Param("appealId") String appealId);
+    List<CommitteeVote> findByAppealId(@Param("appealId") UUID appealId);
 
     @Query("SELECT cv FROM CommitteeVote cv WHERE cv.appeal.appealId = :appealId " +
             "AND cv.committeeMemberId = :committeeMemberId")
-    Optional<CommitteeVote> findByAppealIdAndCommitteeMemberId(
-            @Param("appealId") String appealId,
-            @Param("committeeMemberId") String committeeMemberId
+    Optional<CommitteeVote> findByAppealIdAndCommitteeMemberId(@Param("appealId") UUID appealId, @Param("committeeMemberId") UUID committeeMemberId
     );
 }

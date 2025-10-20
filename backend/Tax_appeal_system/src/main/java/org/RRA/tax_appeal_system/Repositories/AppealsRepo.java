@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface AppealsRepo extends JpaRepository<Appeals, String> {
+public interface AppealsRepo extends JpaRepository<Appeals, UUID> {
     Optional<Appeals> findByTaxAuditedId_Id(UUID taxAuditedId);
 
     List<Appeals> findByTaxAuditedId(TaxAudited taxAudited);
