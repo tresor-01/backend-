@@ -14,7 +14,7 @@ public class CaseAnalytics {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     private String date;
     private int approved;
