@@ -2,13 +2,19 @@ package org.RRA.tax_appeal_system.Services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.RRA.tax_appeal_system.DTOS.DashboardAnalyticsDto;
 import org.RRA.tax_appeal_system.DTOS.responses.MyCaseDTO;
+import org.RRA.tax_appeal_system.Enums.MyCasesStatus;
 import org.RRA.tax_appeal_system.Models.CaseInfo;
 import org.RRA.tax_appeal_system.Models.MyCases;
 import org.RRA.tax_appeal_system.Repositories.MyCasesRepo;
 import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 @Service
@@ -44,4 +50,51 @@ public class MyCasesService {
                 myCase.getStatus()
         );
     }
+
+    public DashboardAnalyticsDto getDashboardAnalytics(String notePreparator) {
+        DashboardAnalyticsDto analytics = new DashboardAnalyticsDto();
+
+        int totalCases = myCasesRepo.countTotalCasesByPreparator(notePreparator);
+        analytics.setTotalCases(totalCases);
+
+        int pendingCases = myCasesRepo.countCasesByPreparatorAndStatus(notePreparator, MyCasesStatus.SUBMITTED);
+        analytics.setPendingCases(pendingCases);
+
+        int reviewedCases = myCasesRepo.countReviewedCasesByPreparator(notePreparator);
+        double reviewRate = totalCases > 0 ? (reviewedCases * 100.0 / totalCases) : 0.0;
+        analytics.setReviewRate(Math.round(reviewRate * 100.0) / 100.0);
+
+        List<Object[]> monthlyData = myCasesRepo.getCaseAnalyticsByMonth(notePreparator);
+        List<DashboardAnalyticsDto.CaseAnalyticsData> caseAnalytics = new ArrayList<>();
+
+        for (Object[] data : monthlyData) {
+            int month = ((Number) data[0]).intValue();
+            long submittedCount = ((Number) data[1]).longValue();
+            long discussedCount = ((Number) data[2]).longValue();
+
+            String monthName = java.time.Month.of(month).getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+
+            caseAnalytics.add(new DashboardAnalyticsDto.CaseAnalyticsData(monthName, (int) submittedCount, (int) discussedCount));
+        }
+        analytics.setCaseAnalytics(caseAnalytics);
+        int totalMembers = 7;
+        int availableMembers = 7;
+        analytics.setAttendanceList(new DashboardAnalyticsDto.AttendanceData(totalMembers, availableMembers));
+
+        return analytics;
+    }
+
+    public List<MyCaseDTO> getCasesForThisWeek(String notePreparator) {
+        LocalDateTime startOfWeek = LocalDateTime.now()
+                .with(java.time.DayOfWeek.MONDAY)
+                .toLocalDate()
+                .atStartOfDay();
+
+        List<MyCases> weekCases = myCasesRepo.findCasesThisWeek(notePreparator, startOfWeek);
+
+        return weekCases.stream()
+                .map(this::convertToMyCaseDTO)
+                .toList();
+    }
+
 }
