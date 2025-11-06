@@ -46,25 +46,30 @@ public class MyCasesController {
         }
     }
     @GetMapping("/analytics")
-    public ResponseEntity<GenericResponse<DashboardAnalyticsDto>> getDashboardAnalytics(Principal principal) {
+    public ResponseEntity<GenericResponse<DashboardAnalyticsDto>> getDashboardAnalytics() {
         try {
-            String notePreparator = principal.getName();
-            DashboardAnalyticsDto analytics = myCasesService.getDashboardAnalytics(notePreparator);
+            DashboardAnalyticsDto analytics = myCasesService.getDashboardAnalytics();
 
-            GenericResponse<DashboardAnalyticsDto> response = new GenericResponse<>(200, "Dashboard analytics retrieved successfully", analytics);
+            GenericResponse<DashboardAnalyticsDto> response = new GenericResponse<>(
+                    200,
+                    "Dashboard analytics retrieved successfully",
+                    analytics
+            );
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            GenericResponse<DashboardAnalyticsDto> errorResponse = new GenericResponse<>(500, "Error retrieving dashboard analytics: " + e.getMessage(), null);
+            GenericResponse<DashboardAnalyticsDto> errorResponse = new GenericResponse<>(
+                    500,
+                    "Error retrieving dashboard analytics: " + e.getMessage(),
+                    null
+            );
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
-
     @GetMapping("/this-week")
-    public ResponseEntity<GenericResponse<List<MyCaseDTO>>> getCasesForThisWeek(Principal principal) {
+    public ResponseEntity<GenericResponse<List<MyCaseDTO>>> getCasesForThisWeek() {
         try {
-            String notePreparator = principal.getName();
-            List<MyCaseDTO> weekCases = myCasesService.getCasesForThisWeek(notePreparator);
+            List<MyCaseDTO> weekCases = myCasesService.getCasesForThisWeek();
 
             GenericResponse<List<MyCaseDTO>> response = new GenericResponse<>(
                     200,
@@ -81,5 +86,4 @@ public class MyCasesController {
             );
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
-    }
-}
+    }}

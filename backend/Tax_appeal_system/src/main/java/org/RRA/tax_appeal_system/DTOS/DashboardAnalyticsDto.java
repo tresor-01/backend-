@@ -15,19 +15,18 @@ public class DashboardAnalyticsDto {
     private int pendingCases;
     private List<CaseAnalyticsData> caseAnalytics;
     private AttendanceData attendanceList;
-
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class CaseAnalyticsData {
         private String month;
-        private int rejectedCount;
-        private int approvedCount;
+        private int justifiedCases;
+        private int unjustifiedCases;
     }
 
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class AttendanceData {
         private int totalMembers;
         private int availableMembers;

@@ -18,20 +18,21 @@ public interface MyCasesRepo extends JpaRepository<MyCases, UUID> {
     @Query("SELECT mc FROM MyCases mc WHERE mc.caseId.caseId = :caseId")
     Optional<MyCases> findByCaseId(@Param("caseId") UUID caseId);
 
-    @Query("SELECT COUNT(mc) FROM MyCases mc WHERE mc.notePreparator = :preparator")
-    int countTotalCasesByPreparator(@Param("preparator") String preparator);
+    int countByStatus(MyCasesStatus status);
 
-    @Query("SELECT COUNT(mc) FROM MyCases mc WHERE mc.notePreparator = :preparator AND mc.status = :status")
-    int countCasesByPreparatorAndStatus(@Param("preparator") String preparator, @Param("status") MyCasesStatus status);
+    @Query("SELECT COUNT(mc) FROM MyCases mc WHERE mc.status IN ('DISCUSSED')")
+    int countReviewedCases();
 
-    @Query("SELECT COUNT(mc) FROM MyCases mc WHERE mc.notePreparator = :preparator " +
-            "AND mc.status = 'DISCUSSED'")
-    int countReviewedCasesByPreparator(@Param("preparator") String preparator);
+    @Query("SELECT MONTH(mc.caseId.appealDate) as month, " +
+            "SUM(CASE WHEN mc.status = 'DISCUSSED' THEN 1 ELSE 0 END) as justified, " +
+            "SUM(CASE WHEN mc.status = 'SUBMITTED' THEN 1 ELSE 0 END) as unjustified " +
+            "FROM MyCases mc " +
+            "WHERE YEAR(mc.caseId.appealDate) = YEAR(CURRENT_DATE) " +
+            "GROUP BY MONTH(mc.caseId.appealDate) " +
+            "ORDER BY month")
+    List<Object[]> getCaseAnalyticsByMonth();
 
-    @Query("SELECT FUNCTION('MONTH', mc.caseId.appealDate) as month,SUM(CASE WHEN mc.status = 'SUBMITTED' THEN 1 ELSE 0 END) as submittedCount, SUM(CASE WHEN mc.status = 'DISCUSSED' THEN 1 ELSE 0 END) as discussedCount FROM MyCases mc WHERE mc.notePreparator = :preparator " +
-            "AND FUNCTION('YEAR', mc.caseId.appealDate) = FUNCTION('YEAR', CURRENT_DATE) GROUP BY FUNCTION('MONTH', mc.caseId.appealDate) ORDER BY month")
-    List<Object[]> getCaseAnalyticsByMonth(@Param("preparator") String preparator);
+    @Query("SELECT mc FROM MyCases mc WHERE mc.caseId.appealDate >= :startOfWeek")
+    List<MyCases> findCasesThisWeek(@Param("startOfWeek") LocalDateTime startOfWeek);
 
-    @Query("SELECT mc FROM MyCases mc WHERE mc.notePreparator = :preparator AND mc.caseId.appealDate >= :startDate")
-    List<MyCases> findCasesThisWeek(@Param("preparator") String preparator, @Param("startDate") LocalDateTime startDate);
 }
